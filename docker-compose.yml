@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  websocket:
+    build: .
+    ports:
+      - "8081:8081"  # Map host port 8081 to container port 8081
+    restart: always   # Automatically restart the container if it stops
