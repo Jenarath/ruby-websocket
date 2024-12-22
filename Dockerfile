@@ -7,7 +7,7 @@ WORKDIR /app
 RUN gem install bundler:2.2.0
 
 # Copy Gemfile and Gemfile.lock
-COPY Gemfile Gemfile.lock ./
+# COPY Gemfile Gemfile.lock ./
 
 # Install gems using Bundler 2
 RUN bundle install
