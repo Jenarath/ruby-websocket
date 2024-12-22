@@ -2,7 +2,7 @@ FROM ruby:2.4.2
 
 WORKDIR /app
 
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 RUN gem install faye-websocket eventmachine
