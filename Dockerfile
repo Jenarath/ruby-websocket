@@ -13,7 +13,7 @@ COPY Gemfile ./
 RUN bundle install
 
 # Install additional gems (faye-websocket, eventmachine)
-RUN gem install faye-websocket eventmachine
+# RUN gem install faye-websocket eventmachine
 
 # Copy the rest of the application
 COPY . .

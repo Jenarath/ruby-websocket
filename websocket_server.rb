@@ -16,8 +16,10 @@ class WebSocketServer
 
         while (data = client.gets)
           handshake << data
+          puts "Received handshake data: #{data}"  # Log handshake data
           if handshake.finished?
             client.write handshake.to_s
+            puts "Handshake finished, upgrading to WebSocket"
             break
           end
         end
