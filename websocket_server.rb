@@ -1,37 +1,6 @@
-require 'faye/websocket'
-require 'eventmachine'
+require "socketify"
 
-class WebSocketServer
-  def self.start
-    EM.run do
-      @clients = []
-
-      # Start the server
-      EM.start_server('0.0.0.0', 8081) do |connection|
-        ws = Faye::WebSocket.new(connection)  # Use this to create a WebSocket
-
-        # Handle open connection
-        ws.on :open do |event|
-          puts 'Client connected'
-          @clients << ws
-        end
-
-        # Handle received message
-        ws.on :message do |event|
-          puts "Received message: #{event.data}"
-          # Broadcast the message to all connected clients
-          @clients.each { |client| client.send(event.data) }
-        end
-
-        # Handle close connection
-        ws.on :close do |event|
-          puts 'Client disconnected'
-          @clients.delete(ws)
-        end
-      end
-    end
-  end
-end
-
-# Start the WebSocket server
-WebSocketServer.start
+Socketify::App.new()
+.get("/", lambda {|response, request| response.end("Hello World socketify from Ruby!")})
+.listen(8082, lambda {|config| puts "Listening on port #{config.port}" })
+.run()
