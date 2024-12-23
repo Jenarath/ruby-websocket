@@ -19,9 +19,8 @@ RUN bundle install
 COPY . .
 
 # Expose the port
-EXPOSE 8081 4567
+EXPOSE 8081
 
 # Command to run the websocket server
-# CMD ["ruby", "websocket_server.rb"]
+CMD ["ruby", "websocket_server.rb"]
 # CMD ["sh", "-c", "ruby websocket_server.rb & ruby api_server.rb"]
-CMD ["sh", "-c", "ruby websocket_server.rb & bundle exec ruby api_server.rb -b 0.0.0.0 -p 4567"]
