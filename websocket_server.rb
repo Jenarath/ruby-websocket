@@ -6,26 +6,27 @@ class WebSocketServer
     EM.run do
       @clients = []
 
-      EM.start_server('0.0.0.0', 8081) do |connection|
-        driver = Faye::WebSocket::Driver.server(connection)
+      # Start a TCP server
+      EM.start_server('0.0.0.0', 8081, nil) do |connection|
+        # Initialize the WebSocket
+        ws = Faye::WebSocket.new(connection)
 
-        driver.on(:open) do
+        ws.on(:open) do |event|
           puts 'Client connected'
-          @clients << driver
+          @clients << ws
         end
 
-        driver.on(:message) do |event|
+        ws.on(:message) do |event|
           puts "Received message: #{event.data}"
-          @clients.each { |client| client.text(event.data) }
+          # Broadcast the message to all connected clients
+          @clients.each { |client| client.send(event.data) }
         end
 
-        driver.on(:close) do
+        ws.on(:close) do |event|
           puts 'Client disconnected'
-          @clients.delete(driver)
+          @clients.delete(ws)
+          ws = nil
         end
-
-        connection.on(:data) { |data| driver.parse(data) }
-        connection.on(:close) { driver.emit(:close) }
       end
     end
   end
